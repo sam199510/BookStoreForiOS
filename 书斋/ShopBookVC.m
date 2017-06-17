@@ -1,0 +1,494 @@
+//
+//  ShopBookVC.m
+//  书斋
+//
+//  Created by 飞 on 2017/6/12.
+//  Copyright © 2017年 Sam. All rights reserved.
+//
+
+#import "ShopBookVC.h"
+#import "DeliveryInfoCell.h"
+#import "DeliveryStyleCell.h"
+#import "DetailOrderInfoCell.h"
+#import "BuyBookSuccessfulVC.h"
+
+#import "UserModel.h"
+#import "BookModel.h"
+
+#import "UIImageView+WebCache.h"
+
+#import "IPConfig.h"
+
+#define ScreenWidth CGRectGetWidth([UIScreen mainScreen].bounds)
+
+@interface ShopBookVC ()<UITableViewDelegate,UITableViewDataSource>
+
+{
+    NSURLConnection *_connection;
+    NSURLConnection *_getDeliveryInfoConnection;
+    NSURLConnection *_checkPayPasswordConnection;
+    NSURLConnection *_successToBuyBookConnection;
+    NSMutableData *_data;
+    NSMutableData *_getDeliveryInfoData;
+    NSMutableData *_checkPayPasswordData;
+    NSMutableData *_successToBuyBookData;
+    NSString *_ipAndHost;
+    NSString *_request;
+    NSString *_getDeliveryInfoRequest;
+    NSString *_checkPayPasswordRequest;
+    NSString *_successToBuyBookRequest;
+    
+    NSMutableArray *_arrUsers;
+    NSMutableArray *_arrBooks;
+}
+
+@property (strong, nonatomic) IBOutlet UITableView *tbShopOrder;
+@property (strong, nonatomic) IBOutlet UIButton *btnCommitOrder;
+
+@property (strong, nonatomic) UITextField *tfPassword;
+@property (strong, nonatomic) UILabel *lbPassword;
+
+@property (assign, nonatomic) CGFloat keyboardHeight;
+
+@end
+
+@implementation ShopBookVC
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    
+    //键盘收回
+    self.view.userInteractionEnabled = YES;
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fingetTap:)];
+    [self.view addGestureRecognizer:singleTap];
+    
+    self.title = @"确认订单";
+    
+    //增加监听，键盘出现时调用
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    //增加监听，键盘消失时调用
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+    _tbShopOrder.delegate = self;
+    _tbShopOrder.dataSource = self;
+    
+    
+    [_btnCommitOrder addTarget:self action:@selector(connectionWithURLToCheckUserPayPassword) forControlEvents:UIControlEventTouchUpInside];
+    
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:YES];
+    [self connectionWithURLToGetDeliveryInfo];
+    [self connectionWithURLToGetDetailOrderInfo];
+}
+
+//键盘收回
+-(void) fingetTap:(UITapGestureRecognizer *)gestureRecognizer{
+    [self.view endEditing:YES];
+}
+
+//键盘出现时调用
+-(void)keyboardWillShow: (NSNotification *) aNotification {
+    //获取键盘高度
+    NSDictionary *userInfo = [aNotification userInfo];
+    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardRect = [aValue CGRectValue];
+    _keyboardHeight = keyboardRect.size.height;
+    
+    //主屏幕高度
+    CGFloat mainScreenHeight = [UIScreen mainScreen].bounds.size.height;
+    //密码框父视图的y坐标
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
+    CGRect rectInTableView = [_tbShopOrder rectForRowAtIndexPath:indexPath];
+    CGRect rect = [_tbShopOrder convertRect:rectInTableView toView:[_tbShopOrder superview]];
+    CGFloat offSetYOfPasswordCell = rect.origin.y;
+    //密码框父视图的高度
+    CGFloat offSetHeightOFPasswordCell = rect.size.height;
+    //键盘高度转储
+    CGFloat heightOfKeyboard = _keyboardHeight;
+    //约束计算
+//    CGFloat offset = mainScreenHeight - (offSetYOfPasswordCell + offSetHeightOFPasswordCell + heightOfKeyboard);
+    CGFloat offset = (mainScreenHeight - heightOfKeyboard) - (offSetHeightOFPasswordCell + offSetYOfPasswordCell);
+    //判断约束
+    if (offset <= 0) {
+        //约束变化
+        [UIView animateWithDuration:0.25 animations:^{
+            CGRect tbShopOrderFrame = _tbShopOrder.frame;
+            tbShopOrderFrame.origin.y = -heightOfKeyboard + (_tbShopOrder.frame.size.height + 44 - (offSetYOfPasswordCell + offSetHeightOFPasswordCell)) ;
+            _tbShopOrder.frame = tbShopOrderFrame;
+        }];
+    }
+}
+
+//键盘消失时调用
+-(void)keyboardWillHide:(NSNotification *)aNotification{
+    [UIView animateWithDuration:0.25 animations:^{
+        CGRect tbShopOrderFrame = _tbShopOrder.frame;
+        tbShopOrderFrame.origin.y = 0;
+        _tbShopOrder.frame = tbShopOrderFrame;
+    }];
+}
+
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+
+-(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
+    return 3;
+}
+
+
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == 0) {
+        return 1;
+    } else if(section == 1) {
+        return 2;
+    } else {
+        return 1;
+    }
+}
+
+
+-(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *cellIdentifier = @"cellIdentifier";
+    
+    UITableViewCell *cell = [_tbShopOrder dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    if (indexPath.section == 0) {
+        static NSString *cellIdentifier1 = @"cellIdentifier1";
+        
+        DeliveryInfoCell *cell = [_tbShopOrder dequeueReusableCellWithIdentifier:cellIdentifier1];
+        
+        if (cell == nil) {
+            [_tbShopOrder registerNib:[UINib nibWithNibName:@"DeliveryInfoCell" bundle:nil] forCellReuseIdentifier:cellIdentifier1];
+            cell = [_tbShopOrder dequeueReusableCellWithIdentifier:cellIdentifier1];
+        }
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        UserModel *userModel = [_arrUsers objectAtIndex:indexPath.row];
+        
+        cell.lbDeliveredUser.text = [NSString stringWithFormat:@"收货人：%@",userModel.userName] ;
+        cell.lbDeliveryMobile.text = [NSString stringWithFormat:@"%ld",userModel.mobile];
+        cell.tVDeliveryAddress.text = [NSString stringWithFormat:@"收货地址：%@",userModel.address] ;
+        
+        return cell;
+    } else if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            static NSString *cellIdentifier2 = @"cellIdentifier2";
+            
+            DetailOrderInfoCell *cell = [_tbShopOrder dequeueReusableCellWithIdentifier:cellIdentifier2];
+            
+            if (cell == nil) {
+                [_tbShopOrder registerNib:[UINib nibWithNibName:@"DetailOrderInfoCell" bundle:nil] forCellReuseIdentifier:cellIdentifier2];
+                cell = [_tbShopOrder dequeueReusableCellWithIdentifier:cellIdentifier2];
+            }
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            BookModel *bookModel = [_arrBooks objectAtIndex:indexPath.row];
+            
+            [cell.iVDetailOrderBookCover sd_setImageWithURL:[NSURL URLWithString:bookModel.cover]];
+            cell.tVDetailOrderBookName.text = bookModel.bookName;
+            cell.lbDetailOrderBookPrice.text = [NSString stringWithFormat:@"¥ %.2f",bookModel.price];
+            
+             return cell;
+        } else if (indexPath.row == 1) {
+            static NSString *cellIdentifier3 = @"cellIdentifier3";
+            
+            DeliveryStyleCell *cell = [_tbShopOrder dequeueReusableCellWithIdentifier:cellIdentifier3];
+            
+            if (cell == nil) {
+                [_tbShopOrder registerNib:[UINib nibWithNibName:@"DeliveryStyleCell" bundle:nil] forCellReuseIdentifier:cellIdentifier3];
+                cell = [_tbShopOrder dequeueReusableCellWithIdentifier:cellIdentifier3];
+            }
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+             return cell;
+        }
+    } else if (indexPath.section == 2) {
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        _tfPassword = [[UITextField alloc] init];
+        _tfPassword.frame = CGRectMake(20, 0, ScreenWidth-40, 44);
+        _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _tfPassword.font = [UIFont systemFontOfSize:15];
+        _tfPassword.secureTextEntry = YES;
+        [cell addSubview:_tfPassword];
+        
+        _lbPassword = [[UILabel alloc] init];
+        _lbPassword.frame = CGRectMake(20, 44, ScreenWidth-40, 20);
+        _lbPassword.textColor = [UIColor redColor];
+        _lbPassword.font = [UIFont systemFontOfSize:13];
+        [cell addSubview:_lbPassword];
+        
+         return cell;
+    }
+    
+    return cell;
+}
+
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    if (section == 0) {
+        return @"收货信息";
+    } else if(section == 1) {
+        return @"订单内容";
+    } else {
+        return @"输入账户密码以完成支付";
+    }
+}
+
+
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section == 0) {
+        return 120;
+    } else if(indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            return 120;
+        } else {
+            return 50;
+        }
+    } else {
+        return 64;
+    }
+}
+
+
+-(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 0;
+}
+
+//得到配送信息
+-(void) connectionWithURLToGetDeliveryInfo{
+    NSLog(@"方法被调用");
+    
+    _ipAndHost = Init_IP;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *strUserName = [userDefaults objectForKey:@"userName"];
+
+    _request = [NSString stringWithFormat:@"getDeliveredInfo.html?userName=%@",strUserName];
+    
+    _request = [_request stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSString *strURL = [NSString stringWithFormat:@"%@/%@", _ipAndHost, _request];
+    NSURL *url = [NSURL URLWithString:strURL];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    _connection = [NSURLConnection connectionWithRequest:request delegate:self];
+    _data = [[NSMutableData alloc] init];
+}
+
+//得到订单详情
+-(void) connectionWithURLToGetDetailOrderInfo{
+    NSLog(@"方法被调用");
+    
+    _ipAndHost = Init_IP;
+    
+    _getDeliveryInfoRequest = [NSString stringWithFormat:@"getBookDetailInfo.html?bookID=%ld",_bookID];
+    
+    _getDeliveryInfoRequest = [_getDeliveryInfoRequest stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSString *strURL2 = [NSString stringWithFormat:@"%@/%@", _ipAndHost, _getDeliveryInfoRequest];
+    NSURL *url2 = [NSURL URLWithString:strURL2];
+    NSURLRequest *request2 = [NSURLRequest requestWithURL:url2];
+    _getDeliveryInfoConnection = [NSURLConnection connectionWithRequest:request2 delegate:self];
+    _getDeliveryInfoData = [[NSMutableData alloc] init];
+}
+
+//检查用户支付密码
+-(void) connectionWithURLToCheckUserPayPassword{
+    NSLog(@"方法被调用");
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *strUserName = [userDefaults objectForKey:@"userName"];
+    
+    _ipAndHost = Init_IP;
+    _checkPayPasswordRequest = [NSString stringWithFormat:@"isPayPasswordRight.html?userName=%@&password=%@", strUserName, _tfPassword.text];
+    
+    _checkPayPasswordRequest = [_checkPayPasswordRequest stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSString *strURL = [NSString stringWithFormat:@"%@/%@", _ipAndHost, _checkPayPasswordRequest];
+    NSURL *url = [NSURL URLWithString:strURL];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    _checkPayPasswordConnection = [NSURLConnection connectionWithRequest:request delegate:self];
+    _checkPayPasswordData = [[NSMutableData alloc] init];
+}
+
+//提交订单
+-(void) connectionWithURLToCommitOrder{
+    NSLog(@"方法被调用");
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *strUserName = [userDefaults objectForKey:@"userName"];
+    
+    _ipAndHost = Init_IP;
+    _successToBuyBookRequest = [NSString stringWithFormat:@"createOrder.html?userName=%@&bookID=%ld", strUserName, _bookID];
+    
+    _successToBuyBookRequest = [_successToBuyBookRequest stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSString *strURL = [NSString stringWithFormat:@"%@/%@", _ipAndHost, _successToBuyBookRequest];
+    NSURL *url = [NSURL URLWithString:strURL];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    _successToBuyBookConnection = [NSURLConnection connectionWithRequest:request delegate:self];
+    _successToBuyBookData = [[NSMutableData alloc] init];
+}
+
+
+-(void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
+    if (connection == _connection) {
+        NSLog(@"错误发生，为%@错误",error);
+    } else if (connection == _getDeliveryInfoConnection ) {
+        NSLog(@"错误发生，为%@错误",error);
+    } else if (connection == _checkPayPasswordConnection) {
+        NSLog(@"错误发生，为%@",error);
+    } else if (connection == _successToBuyBookConnection) {
+        NSLog(@"错误发生，为%@",error);
+    }
+}
+
+
+-(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
+    NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
+    
+    if (res.statusCode == 200) {
+        NSLog(@"连接服务器正常");
+    } else if (res.statusCode == 404){
+        NSLog(@"页面未找到");
+    } else if (res.statusCode == 500) {
+        NSLog(@"服务器崩溃");
+    }
+}
+
+
+-(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
+    if (connection == _connection) {
+        [_data appendData:data];
+        [self parseUserDataWithData];
+    } else if (connection == _getDeliveryInfoConnection ) {
+        [_getDeliveryInfoData appendData:data];
+        [self parseBookDataWithData];
+    } else if (connection == _checkPayPasswordConnection) {
+        [_checkPayPasswordData appendData:data];
+    } else if (connection == _successToBuyBookConnection) {
+        [_successToBuyBookData appendData:data];
+    }
+}
+
+
+-(void)connectionDidFinishLoading:(NSURLConnection *)connection{
+    if (connection == _connection) {
+//        NSString *str = [[NSString alloc] initWithData:_data encoding:NSUTF8StringEncoding];
+//        NSLog(@"%@",str);
+    } else if (connection == _getDeliveryInfoConnection ) {
+//        NSString *str = [[NSString alloc] initWithData:_getDeliveryInfoData encoding:NSUTF8StringEncoding];
+//        NSLog(@"%@",str);
+    } else if (connection == _checkPayPasswordConnection) {
+        NSString *str = [[NSString alloc] initWithData:_checkPayPasswordData encoding:NSUTF8StringEncoding];
+        [self dealWithCommitBtnWithConfigString:str];
+    } else if (connection == _successToBuyBookConnection) {
+        NSString *str = [[NSString alloc] initWithData:_successToBuyBookData encoding:NSUTF8StringEncoding];
+        [self dealWithSuccessfunToCreateOrder:str];
+    }
+}
+
+
+-(void)parseUserDataWithData{
+    NSArray *arrRoot = [NSJSONSerialization JSONObjectWithData:_data options:NSJSONReadingMutableContainers error:nil];
+    _arrUsers = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < arrRoot.count; i++) {
+        NSDictionary *dicUser = [arrRoot objectAtIndex:i];
+        
+        NSInteger userID = [[dicUser objectForKey:@"id"] integerValue];
+        NSString *userName = [dicUser objectForKey:@"userName"];
+        NSInteger mobile = [[dicUser objectForKey:@"mobile"] integerValue];
+        NSString *address = [dicUser objectForKey:@"address"];
+        
+        UserModel *userModel = [[UserModel alloc] init];
+        userModel.userId = userID;
+        userModel.userName = userName;
+        userModel.mobile = mobile;
+        userModel.address = address;
+        
+        [_arrUsers addObject:userModel];
+        
+    }
+    [_tbShopOrder reloadData];
+}
+
+
+-(void)parseBookDataWithData{
+    NSArray *arrRoot = [NSJSONSerialization JSONObjectWithData:_getDeliveryInfoData options:NSJSONReadingMutableContainers error:nil];
+    _arrBooks = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < arrRoot.count; i++) {
+        NSDictionary *dicBook = [arrRoot objectAtIndex:i];
+        
+        NSInteger bookID = [[dicBook objectForKey:@"id"] integerValue];
+        NSString *bookName = [dicBook objectForKey:@"bookName"];
+        NSString *author = [dicBook objectForKey:@"author"];
+        float price = [[dicBook objectForKey:@"price"] floatValue];
+        NSString *introduce = [dicBook objectForKey:@"introduce"];
+        NSString *publisher = [dicBook objectForKey:@"publisher"];
+        NSInteger isbn = [[dicBook objectForKey:@"isbn"] integerValue];
+        NSInteger repertory = [[dicBook objectForKey:@"repertory"] integerValue];
+        NSString *cover = [dicBook objectForKey:@"cover"];
+        
+        BookModel *bookModel = [[BookModel alloc] init];
+        bookModel.bookId = bookID;
+        bookModel.bookName = bookName;
+        bookModel.author = author;
+        bookModel.price = price;
+        bookModel.introduce = introduce;
+        bookModel.publisher = publisher;
+        bookModel.isbn = isbn;
+        bookModel.repertory = repertory;
+        bookModel.cover = cover;
+        
+        [_arrBooks addObject:bookModel];
+    }
+    [_tbShopOrder reloadData];
+}
+
+
+-(void) dealWithCommitBtnWithConfigString:(NSString *) configString{
+    if ([configString isEqualToString:@"0"]) {
+        _lbPassword.text = @"支付密码不正确";
+    } else {
+        _lbPassword.text = @"";
+        [self connectionWithURLToCommitOrder];
+    }
+}
+
+
+-(void) dealWithSuccessfunToCreateOrder: (NSString *) str{
+    NSLog(@"%@",str);
+    
+    BuyBookSuccessfulVC *buyBookSuccessfunVC = [[BuyBookSuccessfulVC alloc] init];
+    [self.navigationController pushViewController:buyBookSuccessfunVC animated:YES];
+}
+
+
+@end

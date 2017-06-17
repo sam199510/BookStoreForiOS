@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="ShowBookCommentCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="119.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gK0-gl-wbN">
+                        <rect key="frame" x="18" y="13" width="137" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="GFj-km-t6a"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HqP-vI-W29">
+                        <rect key="frame" x="165" y="13" width="137" height="20"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SEK-fc-Grx">
+                        <rect key="frame" x="18" y="36" width="284" height="70.5"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                    </textView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="SEK-fc-Grx" firstAttribute="top" secondItem="HqP-vI-W29" secondAttribute="bottom" constant="3" id="1bV-aI-FUI"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="SEK-fc-Grx" secondAttribute="bottom" constant="5" id="1oR-dr-lVn"/>
+                    <constraint firstItem="gK0-gl-wbN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="10" id="85m-xr-4vP"/>
+                    <constraint firstItem="HqP-vI-W29" firstAttribute="width" secondItem="gK0-gl-wbN" secondAttribute="width" id="BAv-1U-Z7x"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="HqP-vI-W29" secondAttribute="trailing" constant="10" id="BKe-ja-afX"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="SEK-fc-Grx" secondAttribute="trailing" constant="10" id="PiV-tu-IMf"/>
+                    <constraint firstItem="HqP-vI-W29" firstAttribute="height" secondItem="gK0-gl-wbN" secondAttribute="height" id="SHV-gO-Rqu"/>
+                    <constraint firstItem="SEK-fc-Grx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="10" id="SRX-wX-nYG"/>
+                    <constraint firstItem="HqP-vI-W29" firstAttribute="top" secondItem="gK0-gl-wbN" secondAttribute="top" id="ahI-wv-ujv"/>
+                    <constraint firstItem="HqP-vI-W29" firstAttribute="leading" secondItem="gK0-gl-wbN" secondAttribute="trailing" constant="10" id="dUV-Ck-kbo"/>
+                    <constraint firstItem="gK0-gl-wbN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="mjf-Yb-hhk"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="lbCommentName" destination="gK0-gl-wbN" id="jMh-oz-cIv"/>
+                <outlet property="lbCommentTime" destination="HqP-vI-W29" id="oPP-Z8-k22"/>
+                <outlet property="tvCommentContent" destination="SEK-fc-Grx" id="QUA-IE-czF"/>
+            </connections>
+            <point key="canvasLocation" x="-21" y="29"/>
+        </tableViewCell>
+    </objects>
+</document>
