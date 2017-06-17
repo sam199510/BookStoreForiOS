@@ -7,18 +7,23 @@
 //
 
 #import "ShopBookVC.h"
+//导入Cell和ViewContoller
 #import "DeliveryInfoCell.h"
 #import "DeliveryStyleCell.h"
 #import "DetailOrderInfoCell.h"
 #import "BuyBookSuccessfulVC.h"
 
+//导入模型
 #import "UserModel.h"
 #import "BookModel.h"
 
+//导入SDWebImage框架
 #import "UIImageView+WebCache.h"
 
+//导入IP配置文件
 #import "IPConfig.h"
 
+//宏定义主屏幕宽度
 #define ScreenWidth CGRectGetWidth([UIScreen mainScreen].bounds)
 
 @interface ShopBookVC ()<UITableViewDelegate,UITableViewDataSource>

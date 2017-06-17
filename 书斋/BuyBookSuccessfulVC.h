@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+//购买成功视图控制器
 @interface BuyBookSuccessfulVC : UIViewController
 
 @end

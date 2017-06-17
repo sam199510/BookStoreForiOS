@@ -9,8 +9,11 @@
 #import "AppDelegate.h"
 //导入登录视图控制器
 #import "LoginVC.h"
+//导入首页视图控制器
 #import "HomeVC.h"
+//导入订单视图控制器
 #import "OrderVC.h"
+//导入我视图控制器
 #import "MeVC.h"
 
 @interface AppDelegate ()

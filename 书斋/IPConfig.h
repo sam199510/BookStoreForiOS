@@ -9,7 +9,7 @@
 #ifndef IPConfig_h
 #define IPConfig_h
 
-//确定服务器IP端口地址
+//确定服务器IP端口地址，当程序打开时需要在下方IP中填入相应的IP地址
 #define Init_IP @"http://172.17.104.143:8080"
 
 #endif /* IPConfig_h */

@@ -11,10 +11,10 @@
 //用户类
 @interface UserModel : NSObject
 
-@property (assign, nonatomic) NSInteger userId;
-@property (retain, nonatomic) NSString *userName;
-@property (retain, nonatomic) NSString *password;
-@property (assign, nonatomic) long mobile;
-@property (retain, nonatomic) NSString *address;
+@property (assign, nonatomic) NSInteger userId;//主键id
+@property (retain, nonatomic) NSString *userName;//用户名
+@property (retain, nonatomic) NSString *password;//密码
+@property (assign, nonatomic) long mobile;//用户手机号
+@property (retain, nonatomic) NSString *address;//用户地址
 
 @end

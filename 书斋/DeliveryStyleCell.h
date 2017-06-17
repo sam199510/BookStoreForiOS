@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+//配送方式Cell
 @interface DeliveryStyleCell : UITableViewCell
 
 @end

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+//订单详情Cell
 @interface DetailOrderInfoCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UIImageView *iVDetailOrderBookCover;

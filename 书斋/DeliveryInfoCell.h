@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+//送货详细地址Cell
 @interface DeliveryInfoCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UILabel *lbDeliveredUser;
