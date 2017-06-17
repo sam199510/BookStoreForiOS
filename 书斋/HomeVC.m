@@ -90,7 +90,7 @@
 }
 */
 
-
+//以下各个方法为表格的协议方法
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
@@ -163,7 +163,7 @@
     [self showViewController:viewControllerToCommit sender:self];
 }
 
-
+//解析每本书的网络连接的方法
 -(void) connectionWithURL{
     NSLog(@"方法被调用");
     
@@ -208,7 +208,7 @@
     //NSString *str = [[NSString alloc] initWithData:_data encoding:NSUTF8StringEncoding];
 }
 
-
+//解析书本信息到书本数组中
 -(void)parseDataWithData{
     NSArray *arrRoot = [NSJSONSerialization JSONObjectWithData:_data options:NSJSONReadingMutableContainers error:nil];
     _arrayBooks = [[NSMutableArray alloc] init];

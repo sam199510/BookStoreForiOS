@@ -8,6 +8,7 @@
 
 #import "CommentSuccessfulVC.h"
 
+//评论成功视图
 @interface CommentSuccessfulVC ()
 
 @end

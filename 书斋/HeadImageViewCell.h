@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+//头像的Cell
 @interface HeadImageViewCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UIImageView *iVHeadImageView;

@@ -8,6 +8,7 @@
 
 #import "AboutVC.h"
 
+//关于视图控制器
 @interface AboutVC ()
 
 @property (strong, nonatomic) IBOutlet UIImageView *iVAboutImage;

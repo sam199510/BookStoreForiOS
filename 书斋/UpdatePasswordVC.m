@@ -13,6 +13,7 @@
 
 #define ScreenWidth CGRectGetWidth([UIScreen mainScreen].bounds)
 
+//更新密码的试图控制器
 @interface UpdatePasswordVC ()<UITableViewDelegate,UITableViewDataSource>
 
 {

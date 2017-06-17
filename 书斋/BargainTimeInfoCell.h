@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+//成交时间的Cell
 @interface BargainTimeInfoCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UILabel *lbBargainTime;

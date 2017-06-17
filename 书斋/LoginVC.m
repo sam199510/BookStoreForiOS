@@ -19,12 +19,14 @@
 @interface LoginVC ()
 
 {
+    //登录的方法的相关网络方面的请求和连接信息
     NSURLConnection *_connection;
     NSMutableData *_data;
     NSString *_ipAndHost;
     NSString *_request;
 }
 
+//和登录有关的相关表单的相关属性
 @property (strong, nonatomic) IBOutlet UITextField *tfUserName;
 @property (strong, nonatomic) IBOutlet UITextField *tfPassword;
 @property (strong, nonatomic) IBOutlet UIButton *loginBtn;
@@ -140,7 +142,7 @@
     [self isLoginRight:str];
 }
 
-
+//检查是否登录正确，如果正确，将信息保存到NSUserDefaults中
 -(void) isLoginRight:(NSString *)strLoginStatus{
     if ([strLoginStatus isEqualToString:@"1"]) {
         NSLog(@"登录成功！");
@@ -156,7 +158,7 @@
     }
 }
 
-
+//将用户信息保存到NSUserDefaults，并且跳转到初始视图中
 -(void)saveToNSUserDefault{
     NSString *userName = _tfUserName.text;
     NSString *password = _tfPassword.text;

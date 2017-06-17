@@ -11,6 +11,7 @@
 #import "UpdateAddressVC.h"
 #import "UpdatePasswordVC.h"
 
+//个人信息视图控制器
 @interface PersonalInfoVC ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (strong, nonatomic) IBOutlet UITableView *personalInfoTable;

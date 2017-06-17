@@ -13,6 +13,7 @@
 
 #define ScreenWidth CGRectGetWidth([UIScreen mainScreen].bounds)
 
+//更新手机号视图控制器
 @interface UpdateMobileVC ()<UITableViewDelegate,UITableViewDataSource>
 
 {

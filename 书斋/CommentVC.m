@@ -16,6 +16,7 @@
 #define ScreenWidth CGRectGetWidth([UIScreen mainScreen].bounds)
 #define ScreenHeight CGRectGetHeight([UIScreen mainScreen].bounds)
 
+//评价视图
 @interface CommentVC ()<UITextViewDelegate>
 
 {
@@ -120,7 +121,7 @@
     }
 }
 
-
+//评价的网络连接的方法
 -(void) connectionWithURLToCommentBook{
     NSLog(@"方法被调用");
     
@@ -169,7 +170,7 @@
     [self parseDataWithData:str];
 }
 
-
+//评价成功，跳转到评价成功的视图的方法
 -(void)parseDataWithData:(NSString *) str{
     NSLog(@"%@",str);
     

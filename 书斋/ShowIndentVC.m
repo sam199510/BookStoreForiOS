@@ -22,6 +22,7 @@
 #define ScreenWidth CGRectGetWidth([UIScreen mainScreen].bounds)
 #define ScreenHeight CGRectGetHeight([UIScreen mainScreen].bounds)
 
+//显示订单的ViewController
 @interface ShowIndentVC ()<UITableViewDelegate,UITableViewDataSource>
 
 {
@@ -77,7 +78,7 @@
 }
 */
 
-
+//以下方法为表格视图的协议方法
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
     return 3;
 }
@@ -220,7 +221,7 @@
     }
 }
 
-
+//检查是否已经评论
 -(void) connectionWithURLToCheckIsComment{
     NSLog(@"方法被调用");
     
@@ -236,6 +237,7 @@
     _data = [[NSMutableData alloc] init];
 }
 
+//获取订单详情的连接方法
 -(void) connectionWithURLToGetIndentDetailInfo{
     NSLog(@"方法被调用");
     
@@ -293,7 +295,7 @@
     }
 }
 
-
+//处理是否已评价的方法，如果已评价，则在下面显示已经评价的Label，如果未评价，则在下面显示评价的按钮
 -(void)dealWithIsComment:(NSString *)strInfo{
     
     if ([strInfo isEqualToString:@"0"]) {
@@ -317,7 +319,7 @@
     
 }
 
-
+//前往评价的方法
 -(void) pressBtnNotComment{
     CommentVC *commentVC = [[CommentVC alloc] init];
     IndentModel *indentModel = [_arrayIndent objectAtIndex:0];
@@ -328,7 +330,7 @@
     [self.navigationController pushViewController:commentVC animated:YES];
 }
 
-
+//解析订单数据的方法
 -(void) praseDateWithData:(NSMutableData *) data{
     NSArray *arrRoot = [NSJSONSerialization JSONObjectWithData:_getIndentData options:NSJSONReadingMutableContainers error:nil];
     _arrayIndent = [[NSMutableArray alloc] init];

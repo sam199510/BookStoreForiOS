@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+//显示图书评价的Cell
 @interface ShowBookCommentCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UILabel *lbCommentName;

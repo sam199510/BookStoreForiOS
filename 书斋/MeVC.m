@@ -16,6 +16,7 @@
 #define ScreenWidth CGRectGetWidth([UIScreen mainScreen].bounds)
 #define ScreenHeitht CGRectGetHeight([UIScreen mainScreen].bounds)
 
+//我视图控制器
 @interface MeVC ()<UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate>
 
 {

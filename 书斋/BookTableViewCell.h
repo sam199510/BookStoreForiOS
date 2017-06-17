@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+//每本书的Cell
 @interface BookTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UIImageView *coverImage;

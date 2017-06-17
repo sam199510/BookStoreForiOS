@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+//订单详情的Cell
 @interface IndentOrderInfoCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UILabel *lbBookPublisher;

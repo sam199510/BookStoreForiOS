@@ -15,6 +15,7 @@
 @interface RegistVC ()<UITextViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UITextFieldDelegate>
 
 {
+    //以下为和网络加载有关的相关参数
     NSURLConnection *_connection;
     NSURLConnection *_registConnection;
     NSMutableData *_data;
@@ -23,6 +24,7 @@
     NSString *_request;
     NSString *_registRequest;
     
+    //定义字典和相关数组
     NSDictionary *_areasArray;
     NSArray *_provinces;
     NSString *_selectedProvince;
@@ -32,6 +34,7 @@
 
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
 
+//以下为注册的表单的各个信息记录
 @property (strong, nonatomic) IBOutlet UITextField *tfUserName;
 @property (strong, nonatomic) IBOutlet UILabel *lbCheckUserName;
 @property (strong, nonatomic) IBOutlet UITextField *tfPassword;
@@ -46,9 +49,12 @@
 @property (strong, nonatomic) IBOutlet UILabel *lbCheckDetailAddress;
 @property (strong, nonatomic) IBOutlet UILabel *lbDetailAddressPlaceholder;
 
+//定义省市区的的选择器
 @property (strong, nonatomic) UIPickerView *provinceAndAreaPickerView;
 
+//取消按钮
 - (IBAction)btnCancel:(id)sender;
+//注册按钮
 - (IBAction)btnRegist:(id)sender;
 
 @end
@@ -107,7 +113,7 @@
 }
 */
 
-
+//TextView的类似于Placeholder的协议方法
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
     if (![text isEqualToString:@""]){
         _lbDetailAddressPlaceholder.hidden = YES;
@@ -154,15 +160,17 @@
     }
 }
 
+//取消按钮方法
 - (IBAction)btnCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+//注册按钮方法
 - (IBAction)btnRegist:(id)sender {
     [self checkEveryProperty];
 }
 
-
+//检查注册表单的相关内容的方法
 -(void)checkEveryProperty{
     
     [_tfUserName resignFirstResponder];
@@ -237,18 +245,16 @@
         isDetailAddress = YES;
     }
     
+    //条件都通过，执行注册方法
     if (isUserName==YES && isPassword==YES && isRePassword==YES && isMobile==YES && isProvinceAndArea==YES && isDetailAddress==YES) {
-    
         [self connectionWithURLToCheckUserName];
-        
-        //NSLog(@"注册成功");
     } else {
 //        UIAlertView *alertV = [[UIAlertView alloc] initWithTitle:@"警告" message:@"请仔细检查信息是否有填写错误" delegate:self cancelButtonTitle:@"好" otherButtonTitles: nil];
 //        [alertV show];
     }
 }
 
-
+//初始化省市区选择器的方法
 -(void) initProvinceAndAreaPickerView{
     _provinceAndAreaPickerView=[[UIPickerView alloc] init];
     _provinceAndAreaPickerView.tag=1004;
@@ -303,7 +309,6 @@
     UIBarButtonItem *proAreaSpaceBtn=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     proAreatoolBar.items=@[proAreaCancelBtn,proAreaSpaceBtn,proAreaConfigBtn];
     
-    
     _tfProvinceAndArea.inputView=_provinceAndAreaPickerView;
     _tfProvinceAndArea.inputAccessoryView=proAreatoolBar;
 }
@@ -322,7 +327,7 @@
     [self fingetTap:gestureRecognizer];
 }
 
-
+//检查用户是否存在的方法
 -(void) connectionWithURLToCheckUserName{
     NSLog(@"方法被调用");
     
@@ -338,7 +343,7 @@
     _data = [[NSMutableData alloc] init];
 }
 
-
+//成功注册的方法
 -(void) connectionWithURLToRegist{
     NSLog(@"方法被调用");
     
@@ -403,7 +408,7 @@
     }
 }
 
-
+//检查是否注册成功
 -(void) isCheckUserNameRight:(NSString *)strLoginStatus{
     if ([strLoginStatus isEqualToString:@"0"]) {
         NSLog(@"注册成功！");

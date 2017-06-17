@@ -13,6 +13,7 @@
 
 #define ScreenWidth CGRectGetWidth([UIScreen mainScreen].bounds)
 
+//更新地址的视图控制器
 @interface UpdateAddressVC ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
 
 {

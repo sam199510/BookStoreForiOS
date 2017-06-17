@@ -11,8 +11,8 @@
 //订单详情Cell
 @interface DetailOrderInfoCell : UITableViewCell
 
-@property (strong, nonatomic) IBOutlet UIImageView *iVDetailOrderBookCover;
-@property (strong, nonatomic) IBOutlet UITextView *tVDetailOrderBookName;
-@property (strong, nonatomic) IBOutlet UILabel *lbDetailOrderBookPrice;
+@property (strong, nonatomic) IBOutlet UIImageView *iVDetailOrderBookCover;//订单详情中书的封面
+@property (strong, nonatomic) IBOutlet UITextView *tVDetailOrderBookName;//订单详情中的书名
+@property (strong, nonatomic) IBOutlet UILabel *lbDetailOrderBookPrice;//订单详情中的书的价格
 
 @end

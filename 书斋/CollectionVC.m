@@ -16,6 +16,7 @@
 
 #import "IPConfig.h"
 
+//收藏视图
 @interface CollectionVC ()<UIViewControllerPreviewingDelegate,UITableViewDelegate,UITableViewDataSource>
 
 {
@@ -75,7 +76,6 @@
     // Pass the selected object to the new view controller.
 }
  */
-
 
 -(void) createBtn{
     _isEdit = NO;
@@ -220,7 +220,7 @@
     [self showViewController:viewControllerToCommit sender:self];
 }
 
-
+//获取收藏的图书的方法
 -(void) connectionWithURLToGetCollectionBook{
     NSLog(@"方法被调用");
     
@@ -306,7 +306,7 @@
    
 }
 
-
+//解析数据的方法
 -(void)parseDataWithData{
     NSArray *arrRoot = [NSJSONSerialization JSONObjectWithData:_data options:NSJSONReadingMutableContainers error:nil];
     _arrayBooks = [[NSMutableArray alloc] init];

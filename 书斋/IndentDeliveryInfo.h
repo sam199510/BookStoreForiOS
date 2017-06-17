@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+//订单配送信息的Cell
 @interface IndentDeliveryInfo : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UILabel *lbIndentBuyer;

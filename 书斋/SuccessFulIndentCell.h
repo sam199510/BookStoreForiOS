@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+//交易成功的Cell
 @interface SuccessFulIndentCell : UITableViewCell
 
 @end

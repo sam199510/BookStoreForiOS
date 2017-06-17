@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+//收藏Cell
 @interface CollectionTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UIImageView *iVCollectBookCover;

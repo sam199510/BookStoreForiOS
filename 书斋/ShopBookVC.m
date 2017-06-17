@@ -29,31 +29,31 @@
 @interface ShopBookVC ()<UITableViewDelegate,UITableViewDataSource>
 
 {
-    NSURLConnection *_connection;
-    NSURLConnection *_getDeliveryInfoConnection;
-    NSURLConnection *_checkPayPasswordConnection;
-    NSURLConnection *_successToBuyBookConnection;
-    NSMutableData *_data;
-    NSMutableData *_getDeliveryInfoData;
-    NSMutableData *_checkPayPasswordData;
-    NSMutableData *_successToBuyBookData;
-    NSString *_ipAndHost;
-    NSString *_request;
-    NSString *_getDeliveryInfoRequest;
-    NSString *_checkPayPasswordRequest;
-    NSString *_successToBuyBookRequest;
+    NSURLConnection *_connection;//初始用于得到配送信息的连接
+    NSURLConnection *_getDeliveryInfoConnection;//用于得到订单详情的连接
+    NSURLConnection *_checkPayPasswordConnection;//用于检查用户支付密码的连接
+    NSURLConnection *_successToBuyBookConnection;//用于提交订单的连接
+    NSMutableData *_data;//配送信息的数据
+    NSMutableData *_getDeliveryInfoData;//订单详情的数据
+    NSMutableData *_checkPayPasswordData;//检查用户支付密码的数据
+    NSMutableData *_successToBuyBookData;//提交订单的数据
+    NSString *_ipAndHost;//IP和端口
+    NSString *_request;//配送信息的请求
+    NSString *_getDeliveryInfoRequest;//订单详情的请求
+    NSString *_checkPayPasswordRequest;//检查支付密码的请求
+    NSString *_successToBuyBookRequest;//成功提交订单的请求
     
-    NSMutableArray *_arrUsers;
-    NSMutableArray *_arrBooks;
+    NSMutableArray *_arrUsers;//定义用户的可变数组
+    NSMutableArray *_arrBooks;//定义书目的可变数组
 }
 
-@property (strong, nonatomic) IBOutlet UITableView *tbShopOrder;
-@property (strong, nonatomic) IBOutlet UIButton *btnCommitOrder;
+@property (strong, nonatomic) IBOutlet UITableView *tbShopOrder;//订单表格
+@property (strong, nonatomic) IBOutlet UIButton *btnCommitOrder;//提交订单按钮
 
-@property (strong, nonatomic) UITextField *tfPassword;
-@property (strong, nonatomic) UILabel *lbPassword;
+@property (strong, nonatomic) UITextField *tfPassword;//输入支付密码的文本框
+@property (strong, nonatomic) UILabel *lbPassword;//用于检查支付密码的Label
 
-@property (assign, nonatomic) CGFloat keyboardHeight;
+@property (assign, nonatomic) CGFloat keyboardHeight;//用于获取键盘的高度
 
 @end
 
@@ -75,11 +75,12 @@
     //增加监听，键盘消失时调用
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
+    //订单表格协议
     _tbShopOrder.delegate = self;
     _tbShopOrder.dataSource = self;
     
-    
-    [_btnCommitOrder addTarget:self action:@selector(connectionWithURLToCheckUserPayPassword) forControlEvents:UIControlEventTouchUpInside];
+    //为提交订单按钮添加函数
+    [_btnCommitOrder addTarget:self action:@selector(pressToCheckPassword) forControlEvents:UIControlEventTouchUpInside];
     
 }
 
@@ -154,11 +155,12 @@
 */
 
 
+//设置表格节数
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
     return 3;
 }
 
-
+//设置表格节点每节的Cell数量
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
         return 1;
@@ -169,7 +171,7 @@
     }
 }
 
-
+//解析Cell
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *cellIdentifier = @"cellIdentifier";
     
@@ -254,7 +256,7 @@
     return cell;
 }
 
-
+//设置表格的每节的头部标题
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
     if (section == 0) {
         return @"收货信息";
@@ -265,7 +267,7 @@
     }
 }
 
-
+//设置表格视图的每节的高度
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0) {
         return 120;
@@ -280,9 +282,19 @@
     }
 }
 
-
+//设置每节的头部的高度
 -(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     return 0;
+}
+
+//预先检查用户密码是否为空的函数
+-(void) pressToCheckPassword{
+    if (_tfPassword.text.length == 0) {
+        _lbPassword.text = @"支付密码不能为空";
+    } else {
+        _lbPassword.text = @"";
+        [self connectionWithURLToCheckUserPayPassword];
+    }
 }
 
 //得到配送信息
@@ -360,7 +372,7 @@
     _successToBuyBookData = [[NSMutableData alloc] init];
 }
 
-
+//发生错误检测
 -(void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
     if (connection == _connection) {
         NSLog(@"错误发生，为%@错误",error);
@@ -373,7 +385,7 @@
     }
 }
 
-
+//检查连接的状态
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
     NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
     
@@ -386,7 +398,7 @@
     }
 }
 
-
+//接受到数据的方法
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
     if (connection == _connection) {
         [_data appendData:data];
@@ -401,7 +413,7 @@
     }
 }
 
-
+//网络数据加载完成
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
     if (connection == _connection) {
 //        NSString *str = [[NSString alloc] initWithData:_data encoding:NSUTF8StringEncoding];
@@ -418,7 +430,7 @@
     }
 }
 
-
+//解析配送用户数据
 -(void)parseUserDataWithData{
     NSArray *arrRoot = [NSJSONSerialization JSONObjectWithData:_data options:NSJSONReadingMutableContainers error:nil];
     _arrUsers = [[NSMutableArray alloc] init];
@@ -443,7 +455,7 @@
     [_tbShopOrder reloadData];
 }
 
-
+//解析书本的数据
 -(void)parseBookDataWithData{
     NSArray *arrRoot = [NSJSONSerialization JSONObjectWithData:_getDeliveryInfoData options:NSJSONReadingMutableContainers error:nil];
     _arrBooks = [[NSMutableArray alloc] init];
@@ -477,7 +489,7 @@
     [_tbShopOrder reloadData];
 }
 
-
+//数据加载完成时检查用户支付密码
 -(void) dealWithCommitBtnWithConfigString:(NSString *) configString{
     if ([configString isEqualToString:@"0"]) {
         _lbPassword.text = @"支付密码不正确";
@@ -487,7 +499,7 @@
     }
 }
 
-
+//成功提交订单
 -(void) dealWithSuccessfunToCreateOrder: (NSString *) str{
     NSLog(@"%@",str);
     

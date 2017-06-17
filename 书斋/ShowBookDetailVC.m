@@ -101,7 +101,7 @@
 }
 */
 
-
+//以下方法为表格方法
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
@@ -241,7 +241,7 @@
     _cancelCollectBookData = [[NSMutableData alloc] init];
 }
 
-
+//获取图书评论的方法
 -(void) connectionWithURLToGetCommentByBookID{
     NSLog(@"方法被调用");
     
@@ -321,7 +321,7 @@
     }
 }
 
-
+//解析书目详情的连接
 -(void)parseDataWithData{
     NSArray *arrRoot = [NSJSONSerialization JSONObjectWithData:_data options:NSJSONReadingMutableContainers error:nil];
     _arrayBooks = [[NSMutableArray alloc] init];
@@ -355,6 +355,7 @@
     [self parseBookToView];
 }
 
+//解析书目到视图中
 -(void) parseBookToView{
     BookModel *bookModel = [_arrayBooks objectAtIndex:0];
     
@@ -411,7 +412,7 @@
     [self.navigationController pushViewController:shopBookVC animated:YES];
 }
 
-
+//解析评论的方法
 -(void)parseCommentDataWithData{
     NSArray *arrRoot = [NSJSONSerialization JSONObjectWithData:_getCommentData options:NSJSONReadingMutableContainers error:nil];
     _arrayComments = [[NSMutableArray alloc] init];

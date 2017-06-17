@@ -10,6 +10,7 @@
 
 @interface ShopBookVC : UIViewController
 
+//定义由上一级传送过来的时候的书本的主键id
 @property (assign, nonatomic) NSInteger bookID;
 
 @end
