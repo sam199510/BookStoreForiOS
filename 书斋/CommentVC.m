@@ -33,6 +33,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *lbCheckComment;
 @property (strong, nonatomic) IBOutlet UIButton *btnSubmitCommentContent;
 
+@property (assign, nonatomic) CGFloat keyboardHeight;
+
 @end
 
 @implementation CommentVC

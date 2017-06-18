@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "&#x4e66;&#x658b;/ShowBookDetailVC.m"
-            timestampString = "519374275.395701"
+            timestampString = "519451237.529841"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "209"
-            endingLineNumber = "209"
+            startingLineNumber = "250"
+            endingLineNumber = "250"
             landmarkName = "-connectionWithURLToCollectBook"
             landmarkType = "7">
          </BreakpointContent>

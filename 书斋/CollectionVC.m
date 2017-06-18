@@ -9,6 +9,7 @@
 #import "CollectionVC.h"
 #import "CollectionTableViewCell.h"
 #import "ShowBookDetailVC.h"
+#import "LoginVC.h"
 
 #import "CollectionModel.h"
 
@@ -229,16 +230,21 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *strUserName = [userDefaults objectForKey:@"userName"];
     
-    NSString *strRequest = [NSString stringWithFormat:@"showCollectBooks.html?userName=%@",strUserName];
-    _request = strRequest;
-    
-    _request = [_request stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    
-    NSString *strURL = [NSString stringWithFormat:@"%@/%@", _ipAndHost, _request];
-    NSURL *url = [NSURL URLWithString:strURL];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    _connect = [NSURLConnection connectionWithRequest:request delegate:self];
-    _data = [[NSMutableData alloc] init];
+    if (!strUserName) {
+        LoginVC *loginVC = [[LoginVC alloc] init];
+        [self presentViewController:loginVC animated:YES completion:nil];
+    } else {
+        NSString *strRequest = [NSString stringWithFormat:@"showCollectBooks.html?userName=%@",strUserName];
+        _request = strRequest;
+        
+        _request = [_request stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        
+        NSString *strURL = [NSString stringWithFormat:@"%@/%@", _ipAndHost, _request];
+        NSURL *url = [NSURL URLWithString:strURL];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        _connect = [NSURLConnection connectionWithRequest:request delegate:self];
+        _data = [[NSMutableData alloc] init];
+    }
 }
 
 
@@ -250,6 +256,8 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *strUserName = [userDefaults objectForKey:@"userName"];
+    
+    
     
     NSString *strRequest = [NSString stringWithFormat:@"cancelToCollectBook.html?bookID=%ld&userName=%@",bookID,strUserName];
     _cancelToCollectBookRequest = strRequest;

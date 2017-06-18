@@ -7,6 +7,8 @@
 //
 
 #import "UpdateAddressVC.h"
+#import "LoginVC.h"
+
 #import "UserModel.h"
 
 #import "IPConfig.h"
@@ -392,16 +394,23 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *strUserName = [userDefaults objectForKey:@"userName"];
     
-    _ipAndHost = Init_IP;
-    _request = [NSString stringWithFormat:@"getUserCurrentAddress.html?userName=%@", strUserName];
+    if (!strUserName) {
+        LoginVC *loginVC = [[LoginVC alloc] init];
+        [self presentViewController:loginVC animated:YES completion:nil];
+    } else {
+        
+        _ipAndHost = Init_IP;
+        _request = [NSString stringWithFormat:@"getUserCurrentAddress.html?userName=%@", strUserName];
+        
+        _request = [_request stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        
+        NSString *strURL = [NSString stringWithFormat:@"%@/%@", _ipAndHost, _request];
+        NSURL *url = [NSURL URLWithString:strURL];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        _connection = [NSURLConnection connectionWithRequest:request delegate:self];
+        _data = [[NSMutableData alloc] init];
+    }
     
-    _request = [_request stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    
-    NSString *strURL = [NSString stringWithFormat:@"%@/%@", _ipAndHost, _request];
-    NSURL *url = [NSURL URLWithString:strURL];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    _connection = [NSURLConnection connectionWithRequest:request delegate:self];
-    _data = [[NSMutableData alloc] init];
 }
 
 

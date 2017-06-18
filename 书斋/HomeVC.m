@@ -17,18 +17,19 @@
 #import "IPConfig.h"
 
 #define ScreenWidth CGRectGetWidth([UIScreen mainScreen].bounds)
+#define ScreenHeight CGRectGetHeight([UIScreen mainScreen].bounds)
 
 @interface HomeVC ()<UIViewControllerPreviewingDelegate,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,NSURLConnectionDelegate,NSURLConnectionDataDelegate,SDCycleScrollViewDelegate>
 
 {
     NSURLConnection *_connect;
     NSMutableData *_data;
-    //创建TableView
-    UITableView *_tableView;
     NSMutableArray *_arrayBooks;
     NSString *_ipAndHost;
     NSString *_request;
 }
+
+@property (strong, nonatomic) UITableView *tableView;
 
 @property (retain, nonatomic) NSTimer *rotateTimer;
 @property (retain, nonatomic) UIPageControl *myPageControl;
@@ -47,24 +48,24 @@
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     self.navigationController.navigationBar.translucent = NO;
     
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 200, ScreenWidth, [UIScreen mainScreen].bounds.size.height-260) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight - 70) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    
+    _tableView.contentInset = UIEdgeInsetsMake(200, 0, 0, 0);
     [self.view addSubview:_tableView];
     
     //图片轮播
     NSArray *imageNames = @[@"1.png",@"2.png",@"3.png"];
     NSArray *imageTitles = @[@"读书谓已多，抚事知不足！",@"读书百遍，其义自现！",@"积财千万，无过读书！"];
     
-    SDCycleScrollView *cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 200) shouldInfiniteLoop:YES imageNamesGroup:imageNames];
+    SDCycleScrollView *cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, -200, [UIScreen mainScreen].bounds.size.width, 200) shouldInfiniteLoop:YES imageNamesGroup:imageNames];
     cycleScrollView.delegate = self;
     cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
     cycleScrollView.titlesGroup = imageTitles;
     cycleScrollView.currentPageDotColor = [UIColor whiteColor];
-    [self.view addSubview:cycleScrollView];
     cycleScrollView.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     cycleScrollView.autoScrollTimeInterval = 5.0;
+    [_tableView addSubview:cycleScrollView];
     
     
 }
@@ -100,6 +101,7 @@
 }
 
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     static NSString *cellIdentifier = @"cellIdentifier";
     
     BookTableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:cellIdentifier];

@@ -114,6 +114,8 @@
 		A587DA501EF4F466009DEAED /* CommentSuccessfulVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A587DA4E1EF4F466009DEAED /* CommentSuccessfulVC.xib */; };
 		A587DA551EF4FA2D009DEAED /* ShowBookCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A587DA531EF4FA2D009DEAED /* ShowBookCommentCell.m */; };
 		A587DA561EF4FA2D009DEAED /* ShowBookCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A587DA541EF4FA2D009DEAED /* ShowBookCommentCell.xib */; };
+		A5C8308F1EF629AC00D99E61 /* ShowBookInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C8308D1EF629AC00D99E61 /* ShowBookInfoCell.m */; };
+		A5C830901EF629AC00D99E61 /* ShowBookInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A5C8308E1EF629AC00D99E61 /* ShowBookInfoCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -286,6 +288,9 @@
 		A587DA521EF4FA2D009DEAED /* ShowBookCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowBookCommentCell.h; sourceTree = "<group>"; };
 		A587DA531EF4FA2D009DEAED /* ShowBookCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowBookCommentCell.m; sourceTree = "<group>"; };
 		A587DA541EF4FA2D009DEAED /* ShowBookCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShowBookCommentCell.xib; sourceTree = "<group>"; };
+		A5C8308C1EF629AC00D99E61 /* ShowBookInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowBookInfoCell.h; sourceTree = "<group>"; };
+		A5C8308D1EF629AC00D99E61 /* ShowBookInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowBookInfoCell.m; sourceTree = "<group>"; };
+		A5C8308E1EF629AC00D99E61 /* ShowBookInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShowBookInfoCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -555,6 +560,7 @@
 		A53C16671EEA7641005A0622 /* ShowBook */ = {
 			isa = PBXGroup;
 			children = (
+				A5C8308B1EF628F300D99E61 /* ShowBookInfoCell */,
 				A587DA511EF4FA06009DEAED /* ShowBookCommentCell */,
 				A53C16681EEA7672005A0622 /* ShowBookDetailVC.h */,
 				A53C16691EEA7672005A0622 /* ShowBookDetailVC.m */,
@@ -914,6 +920,16 @@
 			name = ShowBookCommentCell;
 			sourceTree = "<group>";
 		};
+		A5C8308B1EF628F300D99E61 /* ShowBookInfoCell */ = {
+			isa = PBXGroup;
+			children = (
+				A5C8308C1EF629AC00D99E61 /* ShowBookInfoCell.h */,
+				A5C8308D1EF629AC00D99E61 /* ShowBookInfoCell.m */,
+				A5C8308E1EF629AC00D99E61 /* ShowBookInfoCell.xib */,
+			);
+			name = ShowBookInfoCell;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1007,6 +1023,7 @@
 				A51619C81EEE8AE8005AE53C /* DeliveryStyleCell.xib in Resources */,
 				A528951B1EEB7B340055C500 /* headImage.png in Resources */,
 				A5496FC71EE944700078903D /* 2.png in Resources */,
+				A5C830901EF629AC00D99E61 /* ShowBookInfoCell.xib in Resources */,
 				A5496F831EE8F9C40078903D /* MeVC.xib in Resources */,
 				A52895331EEBEBCB0055C500 /* deliver.png in Resources */,
 				A5496FC61EE944700078903D /* 1.png in Resources */,
@@ -1052,6 +1069,7 @@
 				A53C16661EEA64FF005A0622 /* UIView+SDExtension.m in Sources */,
 				A5496F781EE8F9940078903D /* HomeVC.m in Sources */,
 				A525220C1EEE3CC800F30434 /* CollectionModel.m in Sources */,
+				A5C8308F1EF629AC00D99E61 /* ShowBookInfoCell.m in Sources */,
 				A51619C71EEE8AE8005AE53C /* DeliveryStyleCell.m in Sources */,
 				A51619BB1EEE8A49005AE53C /* DeliveryInfoCell.m in Sources */,
 				A53C16601EEA64FF005A0622 /* TAAbstractDotView.m in Sources */,

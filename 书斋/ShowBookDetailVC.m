@@ -10,6 +10,7 @@
 #import "BookModel.h"
 #import "ShopBookVC.h"
 #import "ShowBookCommentCell.h"
+#import "ShowBookInfoCell.h"
 
 #import "CommentModel.h"
 
@@ -42,15 +43,6 @@
     NSMutableArray *_arrayBooks;
     NSMutableArray *_arrayComments;
 }
-
-@property (strong, nonatomic) IBOutlet UILabel *lbBookName;
-@property (strong, nonatomic) IBOutlet UIImageView *bookImageView;
-@property (strong, nonatomic) IBOutlet UILabel *lbAuthor;
-@property (strong, nonatomic) IBOutlet UILabel *lbPublisher;
-@property (strong, nonatomic) IBOutlet UILabel *lbISBN;
-@property (strong, nonatomic) IBOutlet UILabel *lbPrice;
-@property (strong, nonatomic) IBOutlet UILabel *lbRepertory;
-@property (strong, nonatomic) IBOutlet UITextView *tfIntroduce;
 
 @property (strong, nonatomic) IBOutlet UITableView *tbComment;
 
@@ -103,17 +95,25 @@
 
 //以下方法为表格方法
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
+    return 2;
 }
 
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return _arrayComments.count;
+    if (section == 0) {
+        return 1;
+    } else {
+        return _arrayComments.count;
+    }
 }
 
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 120;
+    if (indexPath.section == 0) {
+        return 245;
+    } else {
+        return 120;
+    }
 }
 
 
@@ -130,34 +130,75 @@
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *cellIdentifier = @"cellIdentifier";
     
-    ShowBookCommentCell *cell = [_tbComment dequeueReusableCellWithIdentifier:cellIdentifier];
+    UITableViewCell *cell = [_tbComment dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        [_tbComment registerNib:[UINib nibWithNibName:@"ShowBookCommentCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [_tbComment dequeueReusableCellWithIdentifier:cellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    CommentModel *commentModel = [_arrayComments objectAtIndex:indexPath.row];
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    NSString *bargainTimeStr = [dateFormatter stringFromDate:commentModel.commentTime];
-    
-    cell.lbCommentName.text = commentModel.buyerName;
-    cell.lbCommentTime.text = bargainTimeStr;
-    cell.tvCommentContent.text = commentModel.content;
+    if (indexPath.section == 0) {
+        static NSString *cellIdentifier1 = @"cellIdentifier1";
+        
+        ShowBookInfoCell *cell = [_tbComment dequeueReusableCellWithIdentifier:cellIdentifier1];
+        if (cell == nil) {
+            [_tbComment registerNib:[UINib nibWithNibName:@"ShowBookInfoCell" bundle:nil] forCellReuseIdentifier:cellIdentifier1];
+            cell = [_tbComment dequeueReusableCellWithIdentifier:cellIdentifier1];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        BookModel *bookModel = [_arrayBooks objectAtIndex:indexPath.row];
+        
+        cell.lbBookName.text = bookModel.bookName;
+        [cell.iVBookCover sd_setImageWithURL:[NSURL URLWithString:bookModel.cover]];
+        cell.lbAuthor.text = [NSString stringWithFormat:@"作者：%@",bookModel.author] ;
+        cell.lbPublisher.text = [NSString stringWithFormat:@"出版社：%@",bookModel.publisher] ;
+        cell.lbISBN.text = [NSString stringWithFormat:@"ISBN：%li",bookModel.isbn];
+        cell.lbBookPrice.text = [NSString stringWithFormat:@"¥ %.2f",bookModel.price];
+        cell.lbRepertory.text = [NSString stringWithFormat:@"库存：%ld", bookModel.repertory];
+        cell.tVBookIntroduce.text = bookModel.introduce;
+        
+        return cell;
+    } else if (indexPath.section == 1) {
+        static NSString *cellIdentifier2 = @"cellIdentifier2";
+        
+        ShowBookCommentCell *cell = [_tbComment dequeueReusableCellWithIdentifier:cellIdentifier2];
+        if (cell == nil) {
+            [_tbComment registerNib:[UINib nibWithNibName:@"ShowBookCommentCell" bundle:nil] forCellReuseIdentifier:cellIdentifier2];
+            cell = [_tbComment dequeueReusableCellWithIdentifier:cellIdentifier2];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        CommentModel *commentModel = [_arrayComments objectAtIndex:indexPath.row];
+        
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+        NSString *bargainTimeStr = [dateFormatter stringFromDate:commentModel.commentTime];
+        
+        cell.lbCommentName.text = commentModel.buyerName;
+        cell.lbCommentTime.text = bargainTimeStr;
+        cell.tvCommentContent.text = commentModel.content;
+        
+        return cell;
+    }
     
     return cell;
 }
 
 
 -(NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    return @"以下是关于这本书的评价";
+    if (section == 0) {
+        return @"";
+    } else {
+        return @"以下是关于这本书的评价";
+    }
 }
 
 
 -(NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
-    return @"没有更多的评价了";
+    if (section == 0) {
+        return @"";
+    } else {
+        return @"没有更多的评价了";
+    }
 }
 
 
@@ -352,22 +393,7 @@
         
         [_arrayBooks addObject:bookModel];
     }
-    [self parseBookToView];
-}
-
-//解析书目到视图中
--(void) parseBookToView{
-    BookModel *bookModel = [_arrayBooks objectAtIndex:0];
-    
-    self.lbBookName.text = bookModel.bookName;
-    self.lbAuthor.text = [NSString stringWithFormat:@"作者：%@",bookModel.author];
-    self.lbPublisher.text = [NSString stringWithFormat:@"出版社：%@",bookModel.publisher];
-    self.lbISBN.text = [NSString stringWithFormat:@"ISBN：%li",bookModel.isbn];
-    self.lbPrice.text = [NSString stringWithFormat:@"¥ %.2f",bookModel.price];
-    self.lbRepertory.text = [NSString stringWithFormat:@"库存：%ld", bookModel.repertory];
-    self.tfIntroduce.text = bookModel.introduce;
-    [self.bookImageView sd_setImageWithURL:[NSURL URLWithString:bookModel.cover]];
-    
+    [_tbComment reloadData];
 }
 
 //处理按钮

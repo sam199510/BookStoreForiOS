@@ -9,6 +9,7 @@
 #import "OrderVC.h"
 #import "IndentTableViewCell.h"
 #import "ShowIndentVC.h"
+#import "LoginVC.h"
 
 #import "IndentModel.h"
 
@@ -224,14 +225,19 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *strUserName = [userDefaults objectForKey:@"userName"];
     
-    _request = [NSString stringWithFormat:@"showIndent.html?userName=%@",strUserName];
-    _request = [_request stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSString *strURL = [NSString stringWithFormat:@"%@/%@", _ipAndHost, _request];
-    NSURL *url = [NSURL URLWithString:strURL];
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    _connect = [NSURLConnection connectionWithRequest:request delegate:self];
-    _data = [[NSMutableData alloc] init];
+    if (!strUserName) {
+        LoginVC *loginVC = [[LoginVC alloc] init];
+        [self presentViewController:loginVC animated:YES completion:nil];
+    } else {
+        _request = [NSString stringWithFormat:@"showIndent.html?userName=%@",strUserName];
+        _request = [_request stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        NSString *strURL = [NSString stringWithFormat:@"%@/%@", _ipAndHost, _request];
+        NSURL *url = [NSURL URLWithString:strURL];
+        
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        _connect = [NSURLConnection connectionWithRequest:request delegate:self];
+        _data = [[NSMutableData alloc] init];
+    }
 }
 
 
