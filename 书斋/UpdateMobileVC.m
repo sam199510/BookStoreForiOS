@@ -156,9 +156,19 @@
             isMobile = NO;
             _lbMobileInfo.text = @"手机号码必须为11位";
         } else {
-            isMobile = YES;
-            _lbMobileInfo.text = @"";
-            [self connectionWithURLToUpdateUserMobile];
+            
+            UserModel *userModel = [_arrUsers objectAtIndex:0];
+            long mobile = userModel.mobile;
+            NSString *strMobile = [NSString stringWithFormat:@"%li",mobile];
+            
+            if ([_tfMobile.text isEqualToString:strMobile]) {
+                isMobile = NO;
+                _lbMobileInfo.text = @"新手机号码和旧手机号码不能一样";
+            } else {
+                isMobile = YES;
+                _lbMobileInfo.text = @"";
+                [self connectionWithURLToUpdateUserMobile];
+            }
         }
     }
 }
@@ -264,6 +274,11 @@
         long mobile = [[dicUser objectForKey:@"mobile"] longValue];
         
         _lbCurrentMobile.text = [NSString stringWithFormat:@"%li",mobile];
+        
+        UserModel *userModel = [[UserModel alloc] init];
+        userModel.mobile = mobile;
+        
+        [_arrUsers addObject:userModel];
     }
     [_tbUpdateMobile reloadData];
 }
