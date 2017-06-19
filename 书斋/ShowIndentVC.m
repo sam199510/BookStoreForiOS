@@ -35,6 +35,8 @@
     NSURLConnection *_getIndentConnect;
     NSMutableData *_getIndentData;
     NSString *_getIndentRequest;
+    
+    NSString *_bargainState;
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *tbShowIndent;
@@ -117,6 +119,12 @@
             }
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            if ([_bargainState isEqualToString:@"0"]) {
+                cell.lbBargainState.text = @"待评价";
+            } else {
+                cell.lbBargainState.text = @"交易成功";
+            }
             
             return cell;
         } else {
@@ -297,7 +305,7 @@
 
 //处理是否已评价的方法，如果已评价，则在下面显示已经评价的Label，如果未评价，则在下面显示评价的按钮
 -(void)dealWithIsComment:(NSString *)strInfo{
-    
+    _bargainState = strInfo;
     if ([strInfo isEqualToString:@"0"]) {
         _btnNotComment = [UIButton buttonWithType:UIButtonTypeSystem];
         _btnNotComment.frame = CGRectMake(0, ScreenHeight - 114, ScreenWidth, 50);

@@ -19,7 +19,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="39.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="交易成功" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9KZ-Fz-d3h">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9KZ-Fz-d3h">
                         <rect key="frame" x="110" y="10" width="100" height="19.5"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="100" id="7zL-RB-R4f"/>
@@ -35,6 +35,9 @@
                     <constraint firstAttribute="bottomMargin" secondItem="9KZ-Fz-d3h" secondAttribute="bottom" constant="2" id="rgf-lp-gR9"/>
                 </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="lbBargainState" destination="9KZ-Fz-d3h" id="BFT-Eh-uRN"/>
+            </connections>
         </tableViewCell>
     </objects>
 </document>

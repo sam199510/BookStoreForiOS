@@ -11,4 +11,6 @@
 //交易成功的Cell
 @interface SuccessFulIndentCell : UITableViewCell
 
+@property (strong, nonatomic) IBOutlet UILabel *lbBargainState;
+
 @end
