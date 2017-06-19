@@ -34,7 +34,7 @@
                             <constraint firstAttribute="width" constant="75" id="5sr-iF-1qG"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="交易成功" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nxz-CK-DNS">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nxz-CK-DNS">
                         <rect key="frame" x="214" y="13" width="60" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="Bxo-2c-a32"/>
@@ -91,6 +91,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="iVbookCover" destination="VMb-Sb-hrt" id="Nei-Um-idc"/>
+                <outlet property="lbBargainState" destination="Nxz-CK-DNS" id="niY-2j-yTu"/>
                 <outlet property="lbBargainTime" destination="ede-iW-i3T" id="Oeu-yD-huy"/>
                 <outlet property="lbBookName" destination="tYD-QK-JP5" id="VYk-Zz-pDD"/>
                 <outlet property="lbBookPrice" destination="nPa-uM-Ly3" id="zAI-UG-bg1"/>

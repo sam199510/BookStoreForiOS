@@ -113,6 +113,12 @@
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSString *bargainTimeStr = [dateFormatter stringFromDate:indentModel.bargainTime];
         
+        if (indentModel.commentState == 1) {
+            cell.lbBargainState.text = @"交易成功";
+        } else if (indentModel.commentState == 0) {
+            cell.lbBargainState.text = @"待评价";
+        }
+        
         cell.lbIndentBookPublisher.text = indentModel.bookPublisher;
         [cell.iVbookCover sd_setImageWithURL:[NSURL URLWithString:indentModel.bookCover]];
         cell.lbBookName.text = indentModel.bookName;

@@ -15,5 +15,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *lbBookName;
 @property (strong, nonatomic) IBOutlet UILabel *lbBookPrice;
 @property (strong, nonatomic) IBOutlet UILabel *lbBargainTime;
+@property (strong, nonatomic) IBOutlet UILabel *lbBargainState;
 
 @end
