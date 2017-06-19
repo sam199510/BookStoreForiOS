@@ -66,8 +66,6 @@
     cycleScrollView.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     cycleScrollView.autoScrollTimeInterval = 5.0;
     [_tableView addSubview:cycleScrollView];
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {

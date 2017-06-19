@@ -46,7 +46,12 @@
     [self.view addGestureRecognizer:singleTap];
     
     _tfUserName.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _tfUserName.layer.borderColor = [[UIColor colorWithRed:253.0/255.0 green:109.0/255.0 blue:9.0/255.0 alpha:1] CGColor];
+    _tfUserName.layer.borderWidth = 1;
+    
     _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _tfPassword.layer.borderWidth = 1;
+    _tfPassword.layer.borderColor = [[UIColor colorWithRed:253.0/255.0 green:109.0/255.0 blue:9.0/255.0 alpha:1] CGColor];
     
     //登录按钮
     [_loginBtn addTarget:self action:@selector(pressToJudgeUserNameAndPassword) forControlEvents:UIControlEventTouchUpInside];

@@ -74,17 +74,17 @@
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fingetTap:)];
     [self.view addGestureRecognizer:singleTap];
     
-    _tfUserName.layer.borderColor = [UIColor grayColor].CGColor;
+    _tfUserName.layer.borderColor = [[UIColor colorWithRed:253.0/255.0 green:109.0/255.0 blue:9.0/255.0 alpha:1] CGColor];
     _tfUserName.clearButtonMode = UITextFieldViewModeWhileEditing;
-    _tfPassword.layer.borderColor = [UIColor grayColor].CGColor;
+    _tfPassword.layer.borderColor = [[UIColor colorWithRed:253.0/255.0 green:109.0/255.0 blue:9.0/255.0 alpha:1] CGColor];
     _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
-    _tfRePassword.layer.borderColor = [UIColor grayColor].CGColor;
+    _tfRePassword.layer.borderColor = [[UIColor colorWithRed:253.0/255.0 green:109.0/255.0 blue:9.0/255.0 alpha:1] CGColor];
     _tfRePassword.clearButtonMode = UITextFieldViewModeWhileEditing;
-    _tfMobile.layer.borderColor = [UIColor grayColor].CGColor;
+    _tfMobile.layer.borderColor = [[UIColor colorWithRed:253.0/255.0 green:109.0/255.0 blue:9.0/255.0 alpha:1] CGColor];
     _tfMobile.clearButtonMode = UITextFieldViewModeWhileEditing;
-    _tfProvinceAndArea.layer.borderColor = [UIColor grayColor].CGColor;
+    _tfProvinceAndArea.layer.borderColor = [[UIColor colorWithRed:253.0/255.0 green:109.0/255.0 blue:9.0/255.0 alpha:1] CGColor];
     _tfProvinceAndArea.clearButtonMode = UITextFieldViewModeWhileEditing;
-    _tvDetailAddress.layer.borderColor = [UIColor grayColor].CGColor;
+    _tvDetailAddress.layer.borderColor = [[UIColor colorWithRed:253.0/255.0 green:109.0/255.0 blue:9.0/255.0 alpha:1] CGColor];
     _tvDetailAddress.layer.borderWidth = 1;
     _tvDetailAddress.layer.cornerRadius = 5;
     _tvDetailAddress.delegate = self;

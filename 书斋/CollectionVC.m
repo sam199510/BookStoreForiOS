@@ -203,6 +203,11 @@
 }
 
 
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return @"删除";
+}
+
+
 //以下两个方法为3DTouch的方法
 -(nullable UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location{
     NSIndexPath *indexPaht = [_tbCollection indexPathForCell:(UITableViewCell *)[previewingContext sourceView]];
