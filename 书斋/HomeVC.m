@@ -194,12 +194,16 @@
     [self showViewController:viewControllerToCommit sender:self];
 }
 
-
+//分类按钮点击方法
 -(void) pressTypeBtn:(UIButton *) btn{
+    //for循环取出tag值
     for (int i = 1000; i < 1005; i++) {
+        //判断tag值是否相等
         if (btn.tag == i) {
             ShowBookByTypeVC *showBookByTypeVC = [[ShowBookByTypeVC alloc] init];
+            //将分类传值
             showBookByTypeVC.bookType = i - 1000;
+            //跳转时隐藏tabBar
             showBookByTypeVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:showBookByTypeVC animated:YES];
         }

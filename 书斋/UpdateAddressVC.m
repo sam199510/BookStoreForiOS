@@ -358,11 +358,11 @@
     [self fingetTap:gestureRecognizer];
 }
 
-
+//验证省市区是否完整填写的方法
 -(void) pressUpdateAddress{
     BOOL isProvinceAndArea;
     BOOL isDetailAddress;
-    
+    //判断省市区
     if (_provinceAndAreaTextField.text.length == 0) {
         _lbProvinceAndArea.text = @"省市区不能为空";
         isProvinceAndArea = NO;
@@ -370,7 +370,7 @@
         _lbProvinceAndArea.text = @"";
         isProvinceAndArea = YES;
     }
-    
+    //判断详细地址
     if (_detailAddressTextView.text.length == 0) {
         _lbDetailAddress.text = @"详细地址不能为空";
         isDetailAddress = NO;
@@ -378,7 +378,7 @@
         _lbDetailAddress.text = @"";
         isDetailAddress = YES;
     }
-    
+    //判断以上两个信息是否都符合
     if (isProvinceAndArea == YES && isDetailAddress == YES) {
         [self connectionWithURLToUpdateUserAddress];
     } else {

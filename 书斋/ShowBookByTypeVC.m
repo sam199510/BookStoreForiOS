@@ -99,13 +99,14 @@
         [self registerForPreviewingWithDelegate:self sourceView:cell];
     }
     
+    //Cell中进行解析
     BookModel *bookModel = [_arrayBooks objectAtIndex:indexPath.row];
     [cell.coverImage sd_setImageWithURL:[NSURL URLWithString:bookModel.cover]];
     cell.txtBookName.text = bookModel.bookName;
     cell.txtAuthor.text = bookModel.author;
     cell.txtRepertory.text = [NSString stringWithFormat:@"库存：%ld",bookModel.repertory];
     cell.txtPrice.text = [NSString stringWithFormat:@"¥ %.2f",bookModel.price];
-//
+
     return cell;
 }
 

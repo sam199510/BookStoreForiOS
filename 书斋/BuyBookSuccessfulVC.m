@@ -23,6 +23,7 @@
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     self.navigationController.navigationBar.translucent = NO;
     
+    //为导航栏左侧添加一个完成按钮
     UIBarButtonItem *leftBtnOfNavgation = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(backToTopView)];
     self.navigationItem.leftBarButtonItem = leftBtnOfNavgation;
     

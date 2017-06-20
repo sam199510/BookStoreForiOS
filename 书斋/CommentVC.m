@@ -93,23 +93,20 @@
 }
 */
 
-
+//一下是类似于UITextField控件的placeholder的方法
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
     if (![text isEqualToString:@""]){
         _lbCommentContentPlaceholder.hidden = YES;
     }
-    
     if ([text isEqualToString:@""] && range.location == 0 && range.length == 1){
         _lbCommentContentPlaceholder.hidden = NO;
     }
-    
     return YES;
 }
 
-
+//检查评价是否为空的方法
 -(void)pressToCommentBook{
     BOOL isComment;
-    
     if (_tVCommentContent.text.length == 0) {
         _lbCheckComment.text = @"评价内容不能为空，亲，写点评价吧!";
         isComment = NO;
@@ -117,7 +114,6 @@
         _lbCheckComment.text = @"";
         isComment = YES;
     }
-    
     if (isComment == YES) {
         [self connectionWithURLToCommentBook];
     }

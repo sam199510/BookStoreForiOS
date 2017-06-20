@@ -115,6 +115,7 @@
         [cellHeadImage.iVHeadImageView.layer setBorderColor:[[UIColor colorWithRed:253.0/255.0 green:109.0/255.0 blue:9.0/255.0 alpha:1] CGColor]];
         cellHeadImage.iVHeadImageView.clipsToBounds = YES;
         cellHeadImage.iVHeadImageView.image = [UIImage imageNamed:@"headImage.png"];
+        //从NSUserDefaults中解析出已经登录的用户的用户名
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         cellHeadImage.lbUserName.text = [userDefaults objectForKey:@"userName"];
         cellHeadImage.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -213,15 +214,14 @@
 //退出登录方法
 -(void)pressLogout{
     NSLog(@"退出登录！");
-    
+    //清空NSUserDefaults中的用户信息
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:@"userName"];
     [userDefaults removeObjectForKey:@"password"];
     [userDefaults synchronize];
-    
+    //跳转到登录视图控制器
     LoginVC *loginVC = [[LoginVC alloc] init];
     [self presentViewController:loginVC animated:YES completion:nil];
-    
 }
 
 @end

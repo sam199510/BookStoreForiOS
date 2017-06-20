@@ -24,6 +24,7 @@
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     self.navigationController.navigationBar.translucent = NO;
     
+    //为导航栏添加完成按钮
     UIBarButtonItem *leftBtnOfNavgation = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(backToTopView)];
     self.navigationItem.leftBarButtonItem = leftBtnOfNavgation;
     
@@ -44,7 +45,7 @@
 }
 */
 
-
+//返回根视图
 -(void) backToTopView{
     [self.navigationController popToRootViewControllerAnimated:YES];
 }

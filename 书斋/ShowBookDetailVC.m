@@ -396,8 +396,9 @@
     [_tbComment reloadData];
 }
 
-//处理按钮
+//进入应用预先检查并处理收藏按钮
 -(void) dealCollectBtnWithCheckStr:(NSString *)checkStr{
+    //checkStr为网络相应的字符串。如果为“0”，则设置为收藏；如果为“1”，则设置为取消收藏。
     if ([checkStr isEqualToString:@"0"]) {
         [_btnCollect setTitle:@"收藏" forState:UIControlStateNormal];
         isCollect = YES;
@@ -422,6 +423,7 @@
 
 //收藏按钮方法
 -(void) collectOrCancelToCollect{
+    //如果isCollec为YES，则连接服务器收藏图书，如果为NO，则连接服务器取消收藏图书
     if (isCollect == YES) {
         [self connectionWithURLToCollectBook];
         isCollect = NO;

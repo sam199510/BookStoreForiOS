@@ -156,7 +156,6 @@
             isMobile = NO;
             _lbMobileInfo.text = @"手机号码必须为11位";
         } else {
-            
             UserModel *userModel = [_arrUsers objectAtIndex:0];
             long mobile = userModel.mobile;
             NSString *strMobile = [NSString stringWithFormat:@"%li",mobile];

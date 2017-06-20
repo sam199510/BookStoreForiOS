@@ -109,6 +109,7 @@
         
         IndentModel *indentModel = [_arrayIndents objectAtIndex:indexPath.row];
         
+        //时间格式反向解析
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSString *bargainTimeStr = [dateFormatter stringFromDate:indentModel.bargainTime];

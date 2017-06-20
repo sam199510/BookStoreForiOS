@@ -231,7 +231,7 @@
     }
 }
 
-
+//修改密码验证
 -(void)updateUserPassword{
     NSLog(@"修改密码");
     BOOL isOldPassword;
