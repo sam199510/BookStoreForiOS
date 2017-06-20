@@ -1,26 +1,22 @@
 //
-//  HomeVC.m
+//  ShowBookByTypeVC.m
 //  书斋
 //
-//  Created by 飞 on 2017/6/8.
+//  Created by 飞 on 2017/6/20.
 //  Copyright © 2017年 Sam. All rights reserved.
 //
 
-#import "HomeVC.h"
-#import "BookModel.h"
+#import "ShowBookByTypeVC.h"
 #import "BookTableViewCell.h"
 #import "ShowBookDetailVC.h"
-#import "ShowBookByTypeVC.h"
 
-#import "UIImageView+WebCache.h"
-#import "SDCycleScrollView.h"
+#import "BookModel.h"
 
 #import "IPConfig.h"
 
-#define ScreenWidth CGRectGetWidth([UIScreen mainScreen].bounds)
-#define ScreenHeight CGRectGetHeight([UIScreen mainScreen].bounds)
+#import "UIImageView+WebCache.h"
 
-@interface HomeVC ()<UIViewControllerPreviewingDelegate,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,NSURLConnectionDelegate,NSURLConnectionDataDelegate,SDCycleScrollViewDelegate>
+@interface ShowBookByTypeVC ()<UIViewControllerPreviewingDelegate,UITableViewDelegate,UITableViewDataSource>
 
 {
     NSURLConnection *_connect;
@@ -30,67 +26,29 @@
     NSString *_request;
 }
 
-@property (strong, nonatomic) UITableView *tableView;
-
-@property (retain, nonatomic) NSTimer *rotateTimer;
-@property (retain, nonatomic) UIPageControl *myPageControl;
+@property (strong, nonatomic) IBOutlet UITableView *tbShowBookByType;
 
 @end
 
-@implementation HomeVC
+@implementation ShowBookByTypeVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
-    self.title = @"首页";
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:253.0/255.0 green:109.0/255.0 blue:9.0/255.0 alpha:1]];
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-    self.navigationController.navigationBar.translucent = NO;
-    
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight - 70) style:UITableViewStyleGrouped];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    _tableView.contentInset = UIEdgeInsetsMake(210 + ScreenWidth/5, 0, 0, 0);
-    [self.view addSubview:_tableView];
-    
-    //图片轮播
-    NSArray *imageNames = @[@"lb1.png",@"lb2.png",@"lb3.png"];
-    NSArray *imageTitles = @[@"读书谓已多，抚事知不足！",@"读书百遍，其义自现！",@"积财千万，无过读书！"];
-    
-    SDCycleScrollView *cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, -210 - ScreenWidth/5, ScreenWidth, 200) shouldInfiniteLoop:YES imageNamesGroup:imageNames];
-    cycleScrollView.delegate = self;
-    cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
-    cycleScrollView.titlesGroup = imageTitles;
-    cycleScrollView.currentPageDotColor = [UIColor whiteColor];
-    cycleScrollView.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    cycleScrollView.autoScrollTimeInterval = 5.0;
-    [_tableView addSubview:cycleScrollView];
-    
-    UIView *typeView = [[UIView alloc] init];
-    typeView.frame = CGRectMake(0, -ScreenWidth/5, ScreenWidth, ScreenWidth/5);
-    typeView.backgroundColor = [UIColor whiteColor];
-    [_tableView addSubview:typeView];
-    
-    NSArray *btnImageArray = @[@"0.png",@"1.png",@"2.png",@"3.png",@"4.png"];
-    NSArray *btnLabelArray = @[@"文学",@"流行",@"文化",@"生活",@"科技"];
-    
-    for (int i = 0; i < 5; i++) {
-        UILabel *btnLab = [[UILabel alloc] init];
-        btnLab.frame = CGRectMake(15 + ScreenWidth/5 * i, ScreenWidth/5 - 20, ScreenWidth/5 - 30, 20);
-        btnLab.text = btnLabelArray[i];
-        btnLab.textAlignment = NSTextAlignmentCenter;
-        btnLab.font = [UIFont systemFontOfSize:12];
-        [typeView addSubview:btnLab];
-        
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        btn.frame = CGRectMake(15 + ScreenWidth/5 * i, 10, ScreenWidth/5 - 30, ScreenWidth/5 - 30);
-        [btn setBackgroundImage:[UIImage imageNamed:btnImageArray[i]] forState:UIControlStateNormal];
-        btn.tag = 1000+i;
-        [btn addTarget:self action:@selector(pressTypeBtn:) forControlEvents:UIControlEventTouchUpInside];
-        [typeView addSubview:btn];
+    if (_bookType == 0) {
+        self.title = @"文学";
+    } else if (_bookType == 1) {
+        self.title = @"流行";
+    } else if (_bookType == 2) {
+        self.title = @"文化";
+    } else if (_bookType == 3) {
+        self.title = @"生活";
+    } else {
+        self.title = @"科技";
     }
+    
+    _tbShowBookByType.delegate = self;
+    _tbShowBookByType.dataSource = self;
     
 }
 
@@ -99,9 +57,9 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    self.tabBarController.tabBar.hidden = NO;
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+    
     [self connectionWithURL];
 }
 
@@ -115,24 +73,25 @@
 }
 */
 
-//以下各个方法为表格的协议方法
+
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
+
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return _arrayBooks.count;
 }
 
+
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
     static NSString *cellIdentifier = @"cellIdentifier";
     
-    BookTableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    BookTableViewCell *cell = [_tbShowBookByType dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if (cell == nil) {
-        [_tableView registerNib:[UINib nibWithNibName:@"BookTableViewCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [_tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        [_tbShowBookByType registerNib:[UINib nibWithNibName:@"BookTableViewCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        cell = [_tbShowBookByType dequeueReusableCellWithIdentifier:cellIdentifier];
     }
     
     //判断3D Touch是否可用，可用的话就去注册
@@ -146,18 +105,16 @@
     cell.txtAuthor.text = bookModel.author;
     cell.txtRepertory.text = [NSString stringWithFormat:@"库存：%ld",bookModel.repertory];
     cell.txtPrice.text = [NSString stringWithFormat:@"¥ %.2f",bookModel.price];
-    
+//
     return cell;
-    
 }
 
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    [_tableView deselectRowAtIndexPath:indexPath animated:YES];
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [_tbShowBookByType deselectRowAtIndexPath:indexPath animated:YES];
     
     BookModel *bookModel = [_arrayBooks objectAtIndex:indexPath.row];
-
+    
     ShowBookDetailVC *showBookDetailVC = [[ShowBookDetailVC alloc] init];
     showBookDetailVC.bookID = bookModel.bookId;
     //推进第二级视图时隐藏tabbar
@@ -166,19 +123,9 @@
     [self.navigationController pushViewController:showBookDetailVC animated:YES];
 }
 
-//tableView一个Cell的高度
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 140;
-}
-
-
--(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 10;
-}
-
 //以下两个方法为3DTouch的方法
 -(nullable UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location{
-    NSIndexPath *indexPaht = [_tableView indexPathForCell:(UITableViewCell *)[previewingContext sourceView]];
+    NSIndexPath *indexPaht = [_tbShowBookByType indexPathForCell:(UITableViewCell *)[previewingContext sourceView]];
     BookModel *bookModel = [_arrayBooks objectAtIndex:indexPaht.row];
     
     //设定预览界面
@@ -195,23 +142,33 @@
 }
 
 
--(void) pressTypeBtn:(UIButton *) btn{
-    for (int i = 1000; i < 1005; i++) {
-        if (btn.tag == i) {
-            ShowBookByTypeVC *showBookByTypeVC = [[ShowBookByTypeVC alloc] init];
-            showBookByTypeVC.bookType = i - 1000;
-            showBookByTypeVC.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:showBookByTypeVC animated:YES];
-        }
+
+-(NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (_bookType == 0) {
+        return @"以下是关于文学的书本";
+    } else if (_bookType == 1) {
+        return @"以下是关于流行的书本";
+    } else if (_bookType == 2) {
+        return @"以下是关于文化的书本";
+    } else if (_bookType == 3) {
+        return @"以下是关于生活的书本";
+    } else {
+        return @"以下是关于科技的书本";
     }
 }
+
+
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 140;
+}
+
 
 //解析每本书的网络连接的方法
 -(void) connectionWithURL{
     NSLog(@"方法被调用");
     
     _ipAndHost = Init_IP;
-    _request = @"showAllBooks.html";
+    _request = [NSString stringWithFormat:@"findBookByBookType.html?type=%ld",_bookType];
     
     _request = [_request stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSString *strURL = [NSString stringWithFormat:@"%@/%@", _ipAndHost, _request];
@@ -282,7 +239,7 @@
         
         [_arrayBooks addObject:bookModel];
     }
-    [_tableView reloadData];
+    [_tbShowBookByType reloadData];
 }
 
 @end

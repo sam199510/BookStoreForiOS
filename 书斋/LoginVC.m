@@ -165,12 +165,15 @@
 
 //将用户信息保存到NSUserDefaults，并且跳转到初始视图中
 -(void)saveToNSUserDefault{
+    //获取用户的基本信息
     NSString *userName = _tfUserName.text;
     NSString *password = _tfPassword.text;
     
+    //将用户的基本信息存入NSUserDefaults中，以便下次打开应用时还是登录状态
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:userName forKey:@"userName"];
     [userDefaults setObject:password forKey:@"password"];
+    //很重要，需要同步，否则会崩溃
     [userDefaults synchronize];
     
     //创建三个试图对象

@@ -249,8 +249,6 @@
     if (isUserName==YES && isPassword==YES && isRePassword==YES && isMobile==YES && isProvinceAndArea==YES && isDetailAddress==YES) {
         [self connectionWithURLToCheckUserName];
     } else {
-//        UIAlertView *alertV = [[UIAlertView alloc] initWithTitle:@"警告" message:@"请仔细检查信息是否有填写错误" delegate:self cancelButtonTitle:@"好" otherButtonTitles: nil];
-//        [alertV show];
     }
 }
 
